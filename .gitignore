@@ -1,0 +1,8 @@
+*.input
+*.output
+*.in
+*.out
+.DS_Store
+*~
+\#*\#
+*.swp
