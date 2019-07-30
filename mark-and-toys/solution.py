@@ -1,16 +1,34 @@
-def read_input():
-    N, K = map(int, raw_input().split())
-    prices = map(int, raw_input().split())
-    return prices, K
+#!/bin/python
 
-def main():
-    prices, K = read_input()
+import math
+import os
+import random
+import re
+import sys
+
+# Complete the maximumToys function below.
+def maximumToys(prices, k):
     prices.sort(reverse=True)
     toys = 0
-    while K >= prices[-1]:
-        prices.pop()
+    while prices and k >= prices[-1]:
+        k -= prices.pop()
         toys += 1
-    print toys
+    return toys
+
 
 if __name__ == '__main__':
-    main()
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    nk = raw_input().split()
+
+    n = int(nk[0])
+
+    k = int(nk[1])
+
+    prices = map(int, raw_input().rstrip().split())
+
+    result = maximumToys(prices, k)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()

@@ -49,41 +49,54 @@ New solution:
 -- at the end of a run, add consecutive run count
 -- on new letter, check if next letter is same as current new letter. If it is,
 start new run. If it's not, do a backwards palindrome check as you advance
-forward in the run.
+forward in the run. At the end of that run, add to the count the number of
+letters advanced as a 'mirror' palindrome count.
+
+----------------------------------
+
+From the editorial, it's probably better to preprocess the string and compress
+it into a form of [(char, count), ...] for cleaner code without lookaheads.
 '''
 
 def consecutiveRunCount(length):
     return length * (length + 1) // 2
 
+def mirrorSubCount(s, i, c, lastRun):
+    subCount = 0
+    j = 1
+    while i + j < len(s) and s[i + j] == c and j <= lastRun:
+        print(i, j, s[i + j], c)
+        j += 1
+        subCount += 1
+    return subCount
+
 # Complete the substrCount function below.
 def substrCount(n, s):
     totalCount = 0
 
-    # preprocess to remove consecutive runs
-    newS = []
+    currentRun = 0
     currentChar = None
-    currentCharCount = 1
-    for char in s:
-        if currentChar is None:
+    for i, char in enumerate(s):
+        # print(i, char)
+        if char is None:
             currentChar = char
-        elif currentChar == char:
-            currentCharCount += 1
+            currentRun += 1
+        elif char == currentChar:
+            currentRun += 1
         else:
-            totalCount += consecutiveRunCount(currentCharCount)
-            newS.append(currentChar)
+            # count consecutive run substrings, ie. 10 substrings in 'aaaa'
+            totalCount += consecutiveRunCount(currentRun)
+
+            # perform a lookahead to determine mirror substring count,
+            # ie. look at aaasa*aa
+            totalCount += mirrorSubCount(s, i, currentChar, currentRun)
+
+            # start a new run with current character
+            currentRun = 1
             currentChar = char
-            currentCharCount = 1
-    totalCount += consecutiveRunCount(currentCharCount)
-    newS.append(currentChar)
 
-    # expand for single palindrome
-    for i, char in enumerate(newS):
-        if i - 1 < 0 or i + 1 >= len(newS):
-            continue
-        if newS[i - 1] == newS[i + 1]:
-            totalCount += 1
-
-    # expand for double palindrome
+    # finalize last consecutive run
+    totalCount += consecutiveRunCount(currentRun)
 
     return totalCount
 
