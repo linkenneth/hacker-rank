@@ -28,8 +28,12 @@ def commonChild(s1, s2):
     L(i, j) = max( L(i - 1, j - 1) + 1 if A[i] == B[j],
                    L(i - 1, j), L(i, j - 1) )
     '''
+    '''
     L = [[0] * (len(s2) + 1) for _ in xrange(len(s2) + 1)]
+    print 'test'
     for i in xrange(1, len(s1) + 1):
+        if i % 100 == 0:
+            print 'i, j', i, j
         for j in xrange(1, len(s2) + 1):
             if s1[i - 1] == s2[j - 1]:
                 L[i][j] = max(L[i][j], 1 + L[i - 1][j - 1])
@@ -37,6 +41,21 @@ def commonChild(s1, s2):
             # print i, j, L[i - 1][j - 1]
             # pprint.pprint(L)
     return L[len(s1)][len(s2)]
+    '''
+    L = [[0] * (len(s2) + 1) for _ in xrange(2)]
+    # print 'test'
+    for i in xrange(1, len(s1) + 1):
+        # if i % 100 == 0:
+        #     print 'i, j', i, j
+        for j in xrange(1, len(s2) + 1):
+            if s1[i - 1] == s2[j - 1]:
+                L[1][j] = max(L[1][j], 1 + L[0][j - 1])
+            L[1][j] = max(L[1][j], L[0][j], L[1][j - 1])
+            # print i, j, L[i - 1][j - 1]
+        # pprint.pprint(L)
+        # print L
+        L[0], L[1] = L[1], [0] * (len(s2) + 1)
+    return L[0][len(s2)]
 
 if __name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
