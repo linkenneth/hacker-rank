@@ -34,8 +34,23 @@ function lilysHomework(arr) {
    * Every swap can cause one element of the array to be perfectly placed,
    * and the last swap causes both elements to be perfectly placed.
    * 1 9 3 7 5 6 4 8 2 10
+   * TODO: not done yet. also need to handle duplicate numbers
    */
+  const ascending = arr.slice().sort();
+  const descending = arr.slice().reverse();
+  // argsort?
+  for (let beautiful of [ascending, descending]) {
+    const beautifulIndices = new Map(beautiful.map([x, i]);
+    let i = 0;
+    let j = 0;
+    let swaps = 0;
+    const visited = new Array(arr.length);
+    while (i < arr.length) {
+      if (beautiful[j] !== arr[j]) {
 
+      }
+    }
+  }
 }
 
 function main() {

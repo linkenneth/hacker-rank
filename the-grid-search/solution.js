@@ -30,15 +30,28 @@ function gridSearch(G, P) {
    * Brute force. Let's see if it works. Are there better solutions such as
    * a modified 2D KMP?
    */
-  for (let R = 0; R < G.length - P.length; R++) {
-    for (let C = 0; C < G[0].length - P[0].length; C++) {
+  for (let R = G.length - P.length; R >= 0; R--) {
+    for (let C = 0; C < G[0].length - P[0].length + 1; C++) {
       let stop = false;
-      for (let r = 0; r < P.length; r++) {
+      // TODO: this fails one test case for (maybe) time?
+
+      // for (let r = 0; r < P.length; r++) {
+      //   for (let c = 0; c < P[0].length; c++) {
+      //     if (G[R + r][C + c] !== P[r][c]) {
+      //       stop = true;
+      //       break;
+      //     } else if (r === P.length - 1 && c === P[0].length - 1) {
+      //       return 'YES';
+      //     }
+      //   }
+      //   if (stop) { break; }
+      // }
+      for (let r = P.length - 1; r >= 0; r--) {
         for (let c = 0; c < P[0].length; c++) {
           if (G[R + r][C + c] !== P[r][c]) {
             stop = true;
             break;
-          } else if (r === P.length - 1 && c === P[0].length - 1) {
+          } else if (r === 0 && c === P[0].length - 1) {
             return 'YES';
           }
         }
