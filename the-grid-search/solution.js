@@ -33,8 +33,6 @@ function gridSearch(G, P) {
   for (let R = G.length - P.length; R >= 0; R--) {
     for (let C = 0; C < G[0].length - P[0].length + 1; C++) {
       let stop = false;
-      // TODO: this fails one test case for (maybe) time?
-
       // for (let r = 0; r < P.length; r++) {
       //   for (let c = 0; c < P[0].length; c++) {
       //     if (G[R + r][C + c] !== P[r][c]) {
@@ -46,6 +44,8 @@ function gridSearch(G, P) {
       //   }
       //   if (stop) { break; }
       // }
+      // NOTE: somehow going backwards is fast enough, or bypasses some of
+      // the test cases so that it works.
       for (let r = P.length - 1; r >= 0; r--) {
         for (let c = 0; c < P[0].length; c++) {
           if (G[R + r][C + c] !== P[r][c]) {
