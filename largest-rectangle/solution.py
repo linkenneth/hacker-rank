@@ -17,6 +17,59 @@ from heapq import heappush, heappop
 
 def largestRectangle(heights):
   '''
+  Actually though the optimal solution involves using a stack, not a heap.
+
+  Maintain a stack of the currently partially started rectangles. Whenever we
+  see a height lower than the latest starts, continue ending rectangle until all
+  the rectangles in the stack are no longer lower than the current height.
+  '''
+  heights = heights + [0]
+  area = 0
+  positions = [] # positions represents the current list of partially started rectangles
+  i = 0
+  while i < len(heights):
+    if not positions or heights[i] >= heights[positions[-1]]:
+      # increase: start a new rectangle
+      positions.append(i)
+      i += 1
+    else:
+      # decrease: end a previously started rectangle
+      # NOTE: whenever we decrease, we don't calculate the currently started
+      # rectangle.
+      # As an example:
+      # heights:   5 12 11 7
+      #                    ^
+      # positions: 0  1
+      # we are computing the rectangle from 12-11 here.
+      prevPos = positions.pop()
+      area = max(area, heights[prevPos] * (i - 1 - positions[-1] if positions else i))
+  return area
+
+
+  #
+  # for i, height in enumerate(heights):
+  #   print('positions', positions)
+  #   print('i, h', i, height)
+  #   print('area', area)
+  #   while height < heights[positions[-1]]: # 10 < 11
+  #     print(height, 'is <', heights[positions[-1]], 'popping...')
+  #     prevPos = positions.pop()
+  #     prevHeight = heights[prevPos]
+  #     area = max(area, prevHeight * (i - prevPos))
+  #   if height > heights[positions[-1]]:
+  #     positions.append(i)
+  # while positions:
+  #   print('positions', positions)
+  #   prevPos = positions.pop()
+  #   prevHeight = heights[prevPos]
+  #   print('area', area)
+  #   print('prevPos, prevHeight', prevPos, prevHeight)
+  #   area = max(area, prevHeight * (len(heights) - prevPos))
+  # print('area final', area)
+  # return area
+
+def largestRectangleHeap(heights):
+  '''
   This is the standard skyline problem. Different possible solutions here:
   (1) Check the O(N^2) set of possible starting points (p0) and ending points
   (p1) of the rectangle. Time: O(N^2).
@@ -40,14 +93,14 @@ def largestRectangle(heights):
   return largest
 
 if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+  fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
-    n = int(input().strip())
+  n = int(input().strip())
 
-    h = list(map(int, input().rstrip().split()))
+  h = list(map(int, input().rstrip().split()))
 
-    result = largestRectangle(h)
+  result = largestRectangle(h)
 
-    fptr.write(str(result) + '\n')
+  fptr.write(str(result) + '\n')
 
-    fptr.close()
+  fptr.close()
